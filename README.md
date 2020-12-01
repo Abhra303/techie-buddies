@@ -1,5 +1,5 @@
 # techie-buddies
-<div>A dynamic blog built with python Django/div>
+<div>A dynamic blog built with python Django</div>
 
 <ul>
   <li>has all real world blog features</li>
