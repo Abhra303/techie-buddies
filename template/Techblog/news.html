@@ -1,0 +1,52 @@
+{% extends 'Techblog/base.html'%}
+
+{%load static%}
+{%block link%}
+<link rel='stylesheet' id='css' href='{% static "Techblog/news.css"%}' />
+<link rel='stylesheet'  href='{% static "Techblog/basenews.css"%}' />
+{% endblock %}
+{% block title%}Techie-buddies | Blogs{% endblock %}
+
+{%block body%}
+
+<div class='popular-posts-banner'>
+    {% for post in popular_posts|slice:4 %}
+    <div class='pop-posts'>
+        <img src='{%static "Techblog/binary_conversion1.png" %}' width='100%' />
+        <div class='desc'>
+            <h3><b>{{post.heading}}</b></h3>
+            <p>{{post.content|safe|truncatewords:7}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% include 'Techblog/basenews.html' %}
+
+{% endblock %}
+
+
+{% block js%}
+<script>
+    let isforward = false;
+    let postBanner = document.querySelector('.popular-posts-banner');
+    let popPosts = document.querySelectorAll('.pop-posts');
+    let imgwidth = popPosts[1].offsetWidth;
+    //auto slider 
+    setInterval(() => {
+        if (!isforward) {
+            postBanner.style.marginLeft = postBanner.offsetLeft - 500 + 'px';
+            if (postBanner.offsetLeft == -500) {
+                isforward = true;
+                postBanner.style.marginLeft = postBanner.offsetLeft + 500 + 'px';
+            }
+        }
+        if (isforward) {
+            postBanner.style.marginLeft = postBanner.offsetLeft + 500 + 'px';
+            if (postBanner.offsetLeft == -500) {
+                isforward = false;
+            }
+        }
+    }, 2500);
+    
+</script>
+{% endblock %}

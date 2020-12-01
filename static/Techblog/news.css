@@ -1,0 +1,35 @@
+.popular-posts-banner{
+    width: 2000px;
+    height: 400px;
+    overflow:hidden;
+    transition-property: margin;
+    transition-duration: 1s;
+}
+body{
+    overflow-x:hidden;
+}
+
+.pop-posts{
+    float: left;
+    width: 500px;
+    height:100%;
+    position:relative;    
+}
+.desc{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    background: rgb(0,0,0);
+    background: rgba(0,0,0,0.5);
+    color:white;padding:20px;
+    border: 2px solid whitesmoke;
+    border-bottom: none;
+}
+.pop-posts img{
+    position: absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+}

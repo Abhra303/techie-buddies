@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='{% static "Techblog/base.css" %}'/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    {%block link%}{% endblock %}
+    <title>{% block title%}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <a href="{% url 'homepage' %}">Techie buddies</a>
+            <a href="{% url 'Blog:news' %}"> News</a>
+            <a href=''>Community</a>
+            <a href=''> Join Us</a>
+            <a href=''>Sign Up</a>
+            <a href='{% url "login" %}'>Log In</a>
+        </nav>
+        <div class='search-btn'>
+            <input id='search' type='text' placeholder="Type text" />
+            <a href='' id='search-click'><i class="fa fa-search" aria-hidden="true"></i></a>
+        </div>
+    </header>
+    {%block body%}{% endblock %}
+    {% block js %}{% endblock %}
+</body>
+</html>

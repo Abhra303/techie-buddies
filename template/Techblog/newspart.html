@@ -1,0 +1,17 @@
+{% load static %}
+{% if blogtag %}
+    {% for post in blogtag %}
+    <a class='related-post-link' href='{% url "Blog:post" post.id%}'>
+        <div class='related-post'>
+            {% if post.front_img %}
+            <img class='post-img' src='{{post.front_img.url}}' />
+            {% else %}
+                <img class='post-img' src='{%static "Techblog/featuredimage.jpg" %}' />
+            {% endif %}
+            <div class='related-desc'>{{post.content|striptags|safe|truncatewords:12}}</div>
+        </div>
+    </a>
+    {% endfor %}
+{% else %}
+        <p style='color:rgb(88, 77, 77);padding:15px 0;'>sorry no recent articles</p>
+{% endif %}

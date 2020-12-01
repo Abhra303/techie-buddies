@@ -1,0 +1,101 @@
+{% extends 'Techblog/base.html' %}
+{% load static %}
+{%block link%}<link rel='stylesheet' href='{% static "Techblog/post.css" %}'/>
+<script src="https://kit.fontawesome.com/a8dc18b367.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% block title %}{{blog.heading}}{% endblock %}
+{%block body %}
+<div class='content'>
+    <div class='heading-wrapper'>
+        <h1 class='heading'>{{blog.heading}}</h1>
+        <div class='post-information'>
+            <div class='author'>
+                {% if blog.author.image %}
+                <img src='{{blog.author.image.url}}'/>
+                {% else %}
+                <img src='{%static "Techblog/guest-user.jpg" %}'/>
+                {% endif %}
+                <div class='author-info'>
+                <span class='name'>{{blog.author.name}}</span><br/>
+                <span class='date'>{{blog.publish_date|date:'M j, Y,'}} {{blog.publish_date|date:'H.i A'}}
+                    ({{blog.publish_date|date:'T'}})</span>
+                    </div>
+            </div>
+            <div class='social-networks'>
+                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        {% if blog.front_img %}
+        <img class='front-image' src='{{blog.front_img.url}}'/>
+        {% endif %}
+    </div>
+    <main>
+        {{blog.content|safe}}
+        <div class='tags'>
+            {% for tag in blog.tags.all  %}
+            <a href='{% url "Blog:tagpost" tag.name %}'>{{tag.name}}</a>
+            {% endfor %}
+        </div>
+        <div class='like-section'>
+            <div class='like-comment'>
+                <p class='like'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p><p class='comment'><i class="far fa-comment"></i> {# <i class="fas fa-comment"></i> #}Comment</p>
+                <p class='void'></p>
+            </div>
+            
+            <div class='social'>
+                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class='comment-section'></div>
+    </main>
+    <div class='you-may-like'>
+        <h1>You may like</h1>
+        <div class='recommended-container'>
+            {% for blog in recommended %}
+            <div class='content-like'>
+                <div class='description'>{{blog.heading}}</div>
+                {% if blog.author.image %}
+                <img src='{{blog.front_img.url}}'/>
+                {% else %}
+                <img src='{%static "Techblog/featuredimage.jpg" %}'/>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    let like = document.querySelector('.like');
+    const comment = document.querySelector('.comment');
+    let likeImage = document.querySelector('.fa-heart');
+    let commentImage = document.querySelector('.fa-comment');
+    let flag2 = true;
+    let flag1 = true;
+
+    like.addEventListener('click',()=>{
+        if (flag1){
+            like.innerHTML = '<i class="fas fa-heart"></i> Liked';
+            flag1 = false;
+        }
+        else{
+            like.innerHTML = '<i class="far fa-heart"></i> Like';
+            flag1 = true;
+        }
+        console.log('like triggered');
+    });
+    comment.addEventListener('click',()=>{
+        if (flag2){
+            comment.innerHTML = '<i class="fas fa-comment"></i> Comment';
+            flag2 = false;
+        }
+        else{
+            comment.innerHTML = '<i class="far fa-comment"></i> Comment';
+            flag2 = true;
+        }
+        console.log('comment triggered')
+    });
+</script>
+
+{% endblock %}

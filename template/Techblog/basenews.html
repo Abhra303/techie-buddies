@@ -1,0 +1,109 @@
+{% load static %}
+<section class='main-section'>
+    <main>
+        <div class='blog-container'>
+            {% if blogs%}
+            {% for blog in blogs %}
+            <div class='post'>
+                {% if blog.front_img %}
+                <img class='main-post-img' src='{{blog.front_img.url}}' />
+                <script>console.log('hello');</script>
+                {% else %}
+                    <img class='main-post-img' src='{%static "Techblog/featuredimage.jpg" %}' />
+                    <script>console.log('kelo');</script>
+                {% endif %}
+                <div class='small-intro'>
+                    <h2>{{blog.heading}}</h2>
+                    <div class='heading-underline'></div>
+                    <div class='post-information'>
+                        <p class='author'><span>By</span> {{blog.author.name}}</p>
+                        <p class='time-of-post'>{{blog.publish_date|date:'M j, Y,'}} {{blog.publish_date|date:'H.i A'}}
+                            ({{blog.publish_date|date:'T'}})</p>
+                    </div>
+                    <div class='front-texts'>
+                        {{blog.content|safe|truncatewords:15}}
+                    </div>
+                    <div class='line'></div>
+                    <a class='read-article' href='{% url "Blog:post" blog.id %}'>Read Article</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h1 style='color:rgb(88, 77, 77);padding:15px 0;'>sorry no articles </h1>
+            {% endif %}
+        </div>
+        <div class='sidebar-wrapper'>
+            <div class='related-items'>
+                <div class='head post-tag'>
+                    <h1>RECENT ARTICLE</h1>
+                    <select id='tag-search' name='tagsname'>
+                        {% for tag in tags %}
+                        <option value={{tag.name}}>{{tag.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class='heading-bar'></div>
+                </div>
+                <div class='related-content'>
+                    
+                    {% for post in blogtag %}
+                    {% if post.was_published_recently  %}
+                    <a class='related-post-link' href='{% url "Blog:post" post.id %}'>
+                    <div class='related-post'>
+                        {% if post.front_img %}
+                        <img class='post-img' src='{{post.front_img.url}}' />
+                        {% else %}
+                            <img class='post-img' src='{%static "Techblog/featuredimage.jpg" %}' />
+                        {% endif %}
+                        <div class='related-desc'>{{post.content|striptags|safe|truncatewords:12}}</div>
+                    </div>
+                    </a>
+                    {% endif%}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class='tags-wrapper'>
+                <div class='head'>
+                    <h1>TAGS</h1>
+                    <div class='heading-bar'></div>
+                </div>
+                {% for tag in tags %}
+                    <a class='tags' href='{% url "Blog:tagpost" tag.name %}'>{{tag.name}}</a>
+                {% endfor %}
+            </div>
+            
+        </div>
+    </main>
+    <div class='page-number'>
+        <div class='kalo' style='display:inline-block;'>
+            {{pagination|safe}}
+        </div> 
+    </div>
+</section>
+<footer>
+    <div class='location'>
+        <h3></h3>
+    </div>
+</footer>
+<script>
+    let select = document.getElementById('tag-search');
+    function changeOption(){
+        fetch(`/news/tags/${select.value}`).then((response)=>{
+            return response.text();
+        }).then((data)=>{
+        let relatedContent = document.querySelector('.related-content');
+        relatedContent.innerHTML = data;
+            console.log(data);
+        });
+    }
+    select.addEventListener('change',changeOption,false);
+    let recentArticle = document.querySelectorAll('.related-post');
+    let relatedContent = document.querySelector('.related-content');
+    let first = true;
+    if(!recentArticle.length && first){
+        relatedContent.innerHTML = "<p style='color:rgb(88, 77, 77);padding:15px 0;'>sorry no recent articles</p>";
+        first = false;
+    }
+    // if(location.href.search('page') != -1){
+    //     fetch('..page/')
+    // }
+</script>

@@ -1,0 +1,15 @@
+{% extends 'Techblog/base.html' %}
+{% load static %}
+{%block link%}<link rel="stylesheet" href="{% static 'Techblog/login.css' %}" />{% endblock %}
+{% block body %}
+<div class="login">
+    <h1>Login</h1>
+      <form method="post">
+        {% csrf_token %}
+        <input type="text" name="u" placeholder="Username" required="required" />
+          <input type="password" name="p" placeholder="Password" required="required" />
+          <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+      </form>
+      
+  </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'Techblog/base.html' %}
+{% load static %}
+{%block link%}
+<link rel='stylesheet'  href='{% static "Techblog/basenews.css"%}' />
+{% endblock %}
+
+
+{%block body%}
+    
+    {% include 'Techblog/basenews.html' %}
+{% endblock%}
