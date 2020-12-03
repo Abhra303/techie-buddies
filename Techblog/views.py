@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 
 def index(response):
-    template = loader.get_template('Techblog/main.html')
+    template = loader.get_template('Techblog/index.html')
     #instead of doing it by loader we can also do this via render
     return HttpResponse(template.render({},response))
 
