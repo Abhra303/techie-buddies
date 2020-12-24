@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from ckeditor import fields
 import datetime
+from django.contrib.auth.models import User
 
 # Create your models here.
 COUNTRY_CHOICES = [('1','Afghanistan'),('2','Albania'),('3','Algeria'),('4','Andorra'),('5','Angola'),('6','Antigua and Barbuda'),('7','Argentina'),('8','Armenia'),('9','Australia'),('10','Austria'),('11','Azerbaijan'),
@@ -50,7 +51,7 @@ class Blog(models.Model):
     content = fields.RichTextField()
     author = models.ForeignKey(Author,on_delete = models.CASCADE)
     tags = models.ManyToManyField(Tag,related_name='blogs')
-    read = models.IntegerField(default=0,editable=False)
+    read = models.IntegerField(default=0)
     # like = models.ManytoManyField(User,related_name='like_users')
     front_img = models.ImageField(blank=True,upload_to='Blog/images',null = True)
     def was_published_recently(self):
@@ -62,14 +63,16 @@ class Blog(models.Model):
     def __str__(self):
         return self.heading
 
-# class User(models.Model):
-#     name = models.CharField(max_length=50)
-#     username = models.CharField(max_length=20)
-#     email_id = models.EmailField(unique=True)
-#     phone_num = models.PositiveIntegerField()
-#     description = fields.RichTextField(blank = True)
-#     password = models.CharField(max_length=15)
 
-#     def __str__(self):
-#         return self.name
+
+class Comment(models.Model):
+    post = models.ForeignKey(Blog,related_name='postcomments' ,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE)
+    parent = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank =True)
+    body = models.TextField()
+    pub_date=models.DateTimeField(auto_now_add=True)
+    like = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return '%s - %s' %(self.post.heading,self.user.username)
 

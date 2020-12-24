@@ -37,7 +37,10 @@ header{
     font-size: 25px;
     color:aliceblue;
     text-decoration: none;
-
+    background:#282c34;
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
 .nav a{
     text-align:center;
@@ -46,4 +49,11 @@ header{
     display:inline-block;
     padding:0 18px;
     font-size: 25px;
+}
+
+#submit{
+    position: relative;
+    right:-50px;
+    z-index: 5;
+    opacity:0;
 }

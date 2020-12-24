@@ -1,6 +1,7 @@
 {% extends 'Techblog/base.html' %}
 {% load static %}
-{%block link%}<link rel='stylesheet' href='{% static "Techblog/post.css" %}'/>
+{%block link%}
+<link rel='stylesheet' href='{% static "Techblog/post.css" %}' />
 <script src="https://kit.fontawesome.com/a8dc18b367.js" crossorigin="anonymous"></script>
 {% endblock %}
 {% block title %}{{blog.heading}}{% endblock %}
@@ -11,23 +12,24 @@
         <div class='post-information'>
             <div class='author'>
                 {% if blog.author.image %}
-                <img src='{{blog.author.image.url}}'/>
+                <img src='{{blog.author.image.url}}' />
                 {% else %}
-                <img src='{%static "Techblog/guest-user.jpg" %}'/>
+                <img src='{%static "Techblog/guest-user.jpg" %}' />
                 {% endif %}
                 <div class='author-info'>
-                <span class='name'>{{blog.author.name}}</span><br/>
-                <span class='date'>{{blog.publish_date|date:'M j, Y,'}} {{blog.publish_date|date:'H.i A'}}
-                    ({{blog.publish_date|date:'T'}})</span>
-                    </div>
+                    <span class='name'>{{blog.author.name}}</span><br />
+                    <span class='date'>{{blog.publish_date|date:'M j, Y,'}} {{blog.publish_date|date:'H.i A'}}
+                        ({{blog.publish_date|date:'T'}})</span>
+                </div>
             </div>
             <div class='social-networks'>
-                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
+                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a
+                    href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
             </div>
         </div>
-        {% if blog.front_img %}
-        <img class='front-image' src='{{blog.front_img.url}}'/>
-        {% endif %}
+        <!-- {% if blog.front_img %}
+        <img class='front-image' src='{{blog.front_img.url}}' />
+        {% endif %} -->
     </div>
     <main>
         {{blog.content|safe}}
@@ -38,27 +40,111 @@
         </div>
         <div class='like-section'>
             <div class='like-comment'>
-                <p class='like'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p><p class='comment'><i class="far fa-comment"></i> {# <i class="fas fa-comment"></i> #}Comment</p>
+                <p class='like'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
+                <p class='comment'><i class="far fa-comment"></i> {# <i class="fas fa-comment"></i> #}Comment</p>
                 <p class='void'></p>
             </div>
-            
+
             <div class='social'>
-                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
+                <a href='#'><i class="fab fa-facebook-f"></i></a><a href='#'><i class="fab fa-whatsapp"></i></a><a
+                    href='#'><i class="fab fa-linkedin-in"></i></a><a href='#'><i class="fab fa-twitter"></i></a>
             </div>
         </div>
-        <div class='comment-section'></div>
+        <div class='comment-section'>
+            {% if request.user.is_authenticated %}
+            <br/>
+            {% if i.comment_set.count > 1 %}
+            <h3> {{ comments.count }} Comment </h3><hr/>
+            {% elif i.comment_set.count == 1 %}
+            <h3> {{ comments.count }} Comments </h3><hr/>
+            {% endif %}
+            <h3> {{ comments.count }} Comments </h3><hr/>
+            <div class='your-comment cmnt'>
+                <img src='{%static "Techblog/l60Hf.png" %}' class='commentor-image' />
+                <div class='comment-here cmt'>
+                    <p class='hd-cmt'>Add your comment</p>
+                    <form action='#' method="POST">
+                        {% csrf_token %}
+                        <textarea class='comment-this' name='comment' width='100px' height='60px'
+                            placeholder="Add your comment"></textarea>
+                        <input type='submit' class='post-comment' value='post' />
+                    </form>
+                </div>
+            </div>
+            {% if comments %}
+            {% for i in comments %}
+            <div class='commented cmnt'>
+                <img src='{%static "Techblog/l60Hf.png" %}' class='commentor-image' />
+                <div class='commented-info cmt'>
+                    <p class='commented-person-name hd-cmt'>{{i.user.username}}</p>
+                    <p class='comment-time'>{{i.pub_date|date:'M j, Y,'}} {{i.pub_date|date:'H.i A'}}</p>
+                    <p class='commented'>{{i.body}}</p>
+                    <div class='commented-like-sec'>
+                        <p class='like lk-2'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
+                        <p class='comment cmt-2'><i class="far fa-comment"></i>
+                            {# <i class="fas fa-comment"></i> #}Reply 
+                        </p>
+                    </div>
+                    <div class='reply'>
+                        {% if i.comment_set.count > 1 %}
+                        <h4>{{ i.comment_set.count }} Replies</h4><br/><hr/>
+                        {% elif i.comment_set.count == 1 %}
+                        <h4>{{ i.comment_set.count }} Reply</h4><br/><hr/>
+                        {% endif %}
+                        <div class='your-comment cmnt repl-cont'>
+                            <img src='{%static "Techblog/l60Hf.png" %}' class='commentor-image' />
+                            <div class='comment-here cmt'>
+                                <p class='hd-cmt'>Add your reply</p>
+                                <form action='{% url "User:reply" %}' method="POST">
+                                    {% csrf_token %}
+                                    <textarea class='comment-this' name='comment' width='100px' height='40px'
+                                        placeholder="Add your reply"></textarea>
+                                    <input type='hidden' name='parent' value={{i.id}} />
+                                    <input type='submit' class='post-comment' value='post' />
+                                </form>
+                            </div>
+                        </div>
+                        {% if i.comment_set.all %}
+                        {% for reply in i.comment_set.all %}
+                        <div class='commented cmnt'>
+                            <img src='{%static "Techblog/l60Hf.png" %}' class='commentor-image' />
+                            <div class='commented-info cmt'>
+                                <p class='commented-person-name hd-cmt'>{{reply.user.username}}</p>
+                                <p class='comment-time'>{{reply.pub_date|date:'M j, Y,'}} {{reply.pub_date|date:'H.i A'}}</p>
+                                <p class='commented'>{{reply.body}}</p>
+                                <div class='commented-like-sec'>
+                                    <p class='like lk-2'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}<p class="wrong">No replies , be the first one!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %}
+            {% else %}
+            <p class='wrong'> No comments, be the first to comment!</p>
+            {% endif %}
+            {% else %}
+            <p class='wrong'> you are not signed in. please <a href='{% url "User:login" %}'>log in</a> here</p>
+            {% endif %}
+        </div>
     </main>
     <div class='you-may-like'>
         <h1>You may like</h1>
         <div class='recommended-container'>
             {% for blog in recommended %}
-            <div class='content-like'>
-                <div class='description'>{{blog.heading}}</div>
-                {% if blog.author.image %}
-                <img src='{{blog.front_img.url}}'/>
-                {% else %}
-                <img src='{%static "Techblog/featuredimage.jpg" %}'/>
-                {% endif %}
+            <div class='content-like'><a class='related-items' href='{% url "Blog:post" blog.id %}'>
+                    <div class='description'>{{blog.heading}}</div>
+                    {% if blog.front_img %}
+                    <img src='{{blog.front_img.url}}' />
+                    {% else %}
+                    <img src='{%static "Techblog/featuredimage.jpg" %}' />
+                    {% endif %}
+                </a>
             </div>
             {% endfor %}
         </div>
@@ -68,34 +154,72 @@
 {% block js %}
 <script>
     let like = document.querySelector('.like');
+    let like2 = document.querySelectorAll('.lk-2');
     const comment = document.querySelector('.comment');
+    const comment2s = document.querySelectorAll('.cmt-2');
     let likeImage = document.querySelector('.fa-heart');
     let commentImage = document.querySelector('.fa-comment');
+    let commentSection = document.querySelector('.comment-section');
+    let replies = document.querySelectorAll('.reply');
     let flag2 = true;
+    let flagCmt1 = true;
     let flag1 = true;
+    let flagCmt2 = true;
 
-    like.addEventListener('click',()=>{
-        if (flag1){
+    const likefunc = () => {
+        if (flag1) {
             like.innerHTML = '<i class="fas fa-heart"></i> Liked';
             flag1 = false;
         }
-        else{
+        else {
             like.innerHTML = '<i class="far fa-heart"></i> Like';
             flag1 = true;
         }
-        console.log('like triggered');
-    });
-    comment.addEventListener('click',()=>{
-        if (flag2){
+    }
+    const likefunc2 = (e) => {
+        if (flagCmt1) {
+            e.target.innerHTML = '<i class="fas fa-heart"></i> Liked';
+            flagCmt1 = false;
+        }
+        else {
+            e.target.innerHTML = '<i class="far fa-heart"></i> Like';
+            flagCmt1 = true;
+        }
+    }
+    like.addEventListener('click', likefunc);
+    if (like2 != null)
+        Array.from(like2).forEach((elem) =>{ elem.addEventListener('click', likefunc2)});
+
+
+    comment.addEventListener('click', () => {
+        if (flag2) {
             comment.innerHTML = '<i class="fas fa-comment"></i> Comment';
             flag2 = false;
+            commentSection.style.display = 'block';
         }
-        else{
+        else {
             comment.innerHTML = '<i class="far fa-comment"></i> Comment';
             flag2 = true;
+            commentSection.style.display = 'none';
         }
         console.log('comment triggered')
     });
+    if (comment2s != null) {
+        Array.from(comment2s).forEach((elem,index)=>{ elem.addEventListener('click', () => {
+            const replies = document.querySelectorAll('.reply');
+            if(flagCmt2) {
+                eleminnerHTML = '<i class="fas fa-comment"></i> Reply';
+                replies[index].style.display = 'block';
+                flagCmt2 = false;
+            }
+            else {
+                elem.innerHTML = '<i class="far fa-comment"></i> Reply';
+                flagCmt2 = true;
+                replies[index].style.display = 'none';
+            }
+        });
+    })}
+
 </script>
 
 {% endblock %}

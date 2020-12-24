@@ -1,0 +1,78 @@
+{% extends 'Techblog/base.html'%}
+
+{%load static%}
+{%block link%}
+<link rel='stylesheet' id='css' href='{% static "Techblog/news.css"%}' />
+<link rel='stylesheet'  href='{% static "Techblog/basenews.css"%}' />
+{% endblock %}
+{% block title%}Search Articles{% endblock %}
+
+{% load static %}
+{% block body %}
+<section class='main-section'>
+    <main>
+        <div class='blog-container'>
+            
+            {% if valid %}
+            "{{query}}"... is too long a word. Try using a shorter word.<br />
+            Your search - {{query}}- did not match any documents.
+                <br/><br/><br/><br/>
+            Suggestions:<br/><br/>
+            <ul>
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try different keywords.</li>
+            <li>Try more general keywords.</li>
+            <li>Try fewer keywords.</li>
+            </ul>
+            {% elif elems %}
+            {% for blog in elems %}
+            <div class='post'>
+                {% if blog.front_img %}
+                <img class='main-post-img' src='{{blog.front_img.url}}' />
+                <script>console.log('hello');</script>
+                {% else %}
+                    <img class='main-post-img' src='{%static "Techblog/featuredimage.jpg" %}' />
+                {% endif %}
+                <div class='small-intro'>
+                    <h2>{{blog.heading}}</h2>
+                    <div class='heading-underline'></div>
+                    <div class='post-information'>
+                        <p class='author'><span>By</span> {{blog.author.name}}</p>
+                        <p class='time-of-post'>{{blog.publish_date|date:'M j, Y,'}} {{blog.publish_date|date:'H.i A'}}
+                            ({{blog.publish_date|date:'T'}})</p>
+                    </div>
+                    <div class='front-texts'>
+                        {{blog.content|safe|truncatewords:15}}
+                    </div>
+                    <div class='line'></div>
+                    <a class='read-article' href='{% url "Blog:post" blog.id %}'>Read Article</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            Your search - "{{query}}"- did not match any documents.
+                <br/><br/><br/><br/>
+            Suggestions:<br/><br/>
+            <ul>
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try different keywords.</li>
+            <li>Try more general keywords.</li>
+            <li>Try fewer keywords.</li>
+            </ul>
+            
+            {% endif %}
+        </div>
+    </main>
+    <!-- <div class='page-number'>
+        <div class='kalo' style='display:inline-block;'>
+            {{pagination|safe}}
+        </div> 
+    </div> -->
+</section>
+<footer>
+    <div class='location'>
+        <h3></h3>
+    </div>
+</footer>
+
+{% endblock %}

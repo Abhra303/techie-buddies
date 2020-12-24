@@ -3,11 +3,12 @@
 {%block link%}<link rel="stylesheet" href="{% static 'Techblog/login.css' %}" />{% endblock %}
 {% block body %}
 <div class="login">
-    <h1>Login</h1>
-      <form action='{% url "User:login" %}' method="post">
+    <h1>Sign In</h1>
+      <form method="post">
         {% csrf_token %}
         <input type="text" name="username" placeholder="Username" required="required" />
           <input type="password" name="password" placeholder="Password" required="required" />
+          <input type="password" name="password2" placeholder="Confirm password" required="required" />
           <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
       </form>
       

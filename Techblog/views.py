@@ -3,6 +3,8 @@ from django.template import loader
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
+from Blog.models import Blog
 
 def index(response):
     template = loader.get_template('Techblog/index.html')
@@ -32,3 +34,15 @@ def sign_in(request):
         form = UserCreationForm()
         print(form)
         return render(request, 'Techblog/login.html', {'form': form})
+
+
+def search(request):
+    query = request.GET['query']
+    elems = []
+    invalid= False
+    if len(query) > 70:
+        invalid = True
+    if not invalid:
+        elems = Blog.objects.filter( Q(heading__icontains= query) | Q(content__icontains = query))
+        # areit = elems.union(elemsadd)
+    return render(request,'Techblog/search.html',{'elems':elems,'query':query,'valid':invalid})

@@ -19,12 +19,18 @@
                 <a href="{% url 'Blog:news' %}"> News</a>
                 <a href=''>Community</a>
                 <a href=''> Join Us</a>
-                <a href=''>Sign Up</a>
-                <a href=''>Log In</a>
+                {% if not request.user.is_authenticated %}
+                <a href='{% url "User:register" %}'>Sign Up</a>
+                <a href='{% url "User:login" %}'>Log In</a>
+                {% else %}
+                <a href='{% url "User:logout" %}'>Log Out</a>
+                {% endif%}
             </nav>
             <div class='search-btn'>
-                <input id='search' type='text' placeholder="Type text" />
-                <a href='' id='search-click'><i class="fa fa-search" aria-hidden="true"></i></a>
+                <form action='{% url "search" %}' method='GET'>
+                    <input id='search' type='text' placeholder="Type text" name='query' required /> 
+                    <button type='submit' id='search-click' ><i class="fa fa-search" aria-hidden="true"></i></button>
+                </form>
             </div>
         </header>
         <div class="fixed-heading">

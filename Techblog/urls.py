@@ -19,10 +19,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 from . import views
 
+admin.site.site_header = 'Techie Buddies Admin'
+admin.site.site_title = "Techie Buddies Admin Panel"
+admin.site.index_title = "Welcome to Techhie buddies Admin Panel"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index,name='homepage'),
     path('news/',include('Blog.urls')),
-    path('log_in/',views.sign_in,name='login')
+    path('user/',include('user.urls')),
+    path('search',views.search,name='search')
+
 ] + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Blog,Author,Tag
+from .models import Blog,Author,Tag,Comment
 import datetime,random
 # Create your views here.
 
@@ -21,7 +21,10 @@ def index(request,index='1'):
         if total_blogs > 8:
             total_pages += 1 # adding one more page if the last page will contains less contacts 
         pagination = make_pagination_html(current_page, total_pages)
-    popular_posts = Blog.objects.filter(publish_date__gte=week_ago).order_by('-read')
+    popular_posts = []
+    while not popular_posts:
+        popular_posts = Blog.objects.filter(publish_date__gte=week_ago).order_by('-read')
+        week_ago = week_ago - datetime.timedelta(days = 4)
     return render(request,'Techblog/news.html',{'blogs':blog_list,'popular_posts':popular_posts,'tags':tags,'blogtag':blogtag,'pagination': pagination})
 
 # update the latest post section on the basis of tags
@@ -98,23 +101,27 @@ def make_pagination_html(current_page, total_pages,path=''):
 def post(request,val):
     blog = Blog.objects.get(pk = val)
     tags = blog.tags.all()
+    if request.method == 'POST':
+        comment = request.POST['comment']
+        comm = Comment(post = blog,user = request.user,body=comment)
+        comm.save()
+    
+    comments = blog.postcomments.filter(parent = None)
     num_of_tags = tags.count()
     recommended_blogs = []
     num_of_blogs = 0
     while num_of_blogs < 8 :
-        if num_of_tags is 1:
+        if num_of_tags == 1:
             rand = 0
         elif num_of_tags:
             rand = random.randint(0,num_of_tags -1)
-        print(rand)
-        print(num_of_tags)
         blogs = tags[rand].blogs.all()
         count_of_blogs = blogs.count()
         if count_of_blogs > num_of_blogs:
             recommended_blogs.append(blogs[num_of_blogs])
         else:
             random1 = 0
-            if count_of_blogs is 1:
+            if count_of_blogs == 1:
                 random1 = random.randint(0,count_of_blogs)
             else:
                 random1 = random.randint(0,count_of_blogs-1)
@@ -122,6 +129,6 @@ def post(request,val):
         num_of_blogs = num_of_blogs + 1
     if not blog:
         return render(request,'Techblog/error.html')
-    return render(request,'Techblog/post.html',{'blog':blog,'recommended':recommended_blogs})
+    return render(request,'Techblog/post.html',{'blog':blog,'recommended':recommended_blogs,'comments':comments})
 
 

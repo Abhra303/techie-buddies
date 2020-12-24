@@ -8,5 +8,6 @@ urlpatterns = [
     path('post/<int:val>',views.post,name='post'),
     path('<slug:name>',views.tagpost,name='tagpost'),
     path('page/<int:index>',views.index),
+    
     path('<slug:name>/page/<int:index>',views.tagpost)
 ]

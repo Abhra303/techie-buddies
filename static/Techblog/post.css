@@ -150,3 +150,84 @@ main{
     content:'';
     clear:both;
 }
+
+.comment-section{
+    width: 100%;
+    display:none;
+}
+.cmnt{
+    overflow:auto;
+    padding-left:5px;
+    width:100%;
+    margin-top: 18px;
+}
+.cmnt::after{
+    display:table;
+    content:'';
+    clear:both;
+}
+.commentor-image{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    display: block;
+    float:left;
+}
+
+.cmt{
+    float:left;
+    padding:2px 10px ;
+    font-size: 0.9rem;
+    line-height: normal;
+    width:calc(100% - 41px);
+}
+.hd-cmt{
+    margin-top:0;
+    margin-bottom:21px;
+    font-size: 1.2rem;
+    display:block;
+}
+.comment-time{    
+    font-size: smaller;
+    font-weight: 600;
+    color: #00000099;
+    margin-bottom: 11px;
+    display: block;
+}
+.commented{
+    font-size:16px;
+    line-height:20px;
+    margin-bottom: 12px;
+}
+.comment-this{
+    margin: 0px;
+    width: 774px;
+    height: 285px;
+    overflow-y: auto;
+    max-width: 100%;
+}
+
+.post-comment{
+    padding:5px 12px;
+    background-color: #026e58;
+    color: white;
+    margin-top:12px;
+    margin-bottom: 8px;
+    border: none;
+}
+.your-comment{
+    border-bottom:1px solid #413f3f;
+}
+.wrong{
+    font-size: 0.8rem;
+    font-weight: bold;
+    opacity: 0.8;
+}
+.related-items{
+    text-decoration: none;
+    color: black;
+}
+.reply{
+    display: none;
+    margin-top:62px;
+}
