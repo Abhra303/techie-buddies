@@ -52,7 +52,6 @@ class Blog(models.Model):
     author = models.ForeignKey(Author,on_delete = models.CASCADE)
     tags = models.ManyToManyField(Tag,related_name='blogs')
     read = models.IntegerField(default=0)
-    # like = models.ManytoManyField(User,related_name='like_users')
     front_img = models.ImageField(blank=True,upload_to='Blog/images',null = True)
     def was_published_recently(self):
         return self.publish_date >= timezone.now() - datetime.timedelta(days= 2)
@@ -64,6 +63,9 @@ class Blog(models.Model):
         return self.heading
 
 
+class Like(models.Model):
+    user = models.ForeignKey(User,related_name='like_users',on_delete=models.CASCADE)
+    post = models.ForeignKey(Blog,related_name='like_posts',on_delete=models.CASCADE)
 
 class Comment(models.Model):
     post = models.ForeignKey(Blog,related_name='postcomments' ,on_delete=models.CASCADE)
@@ -71,7 +73,6 @@ class Comment(models.Model):
     parent = models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank =True)
     body = models.TextField()
     pub_date=models.DateTimeField(auto_now_add=True)
-    like = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return '%s - %s' %(self.post.heading,self.user.username)
