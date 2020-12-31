@@ -80,7 +80,7 @@
                     <p class='comment-time'>{{i.pub_date|date:'M j, Y,'}} {{i.pub_date|date:'H.i A'}}</p>
                     <p class='commented'>{{i.body}}</p>
                     <div class='commented-like-sec'>
-                        <p class='like lk-2'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
+                        <p class='like'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
                         <p class='comment cmt-2'><i class="far fa-comment"></i>
                             {# <i class="fas fa-comment"></i> #}Reply 
                         </p>
@@ -113,7 +113,7 @@
                                 <p class='comment-time'>{{reply.pub_date|date:'M j, Y,'}} {{reply.pub_date|date:'H.i A'}}</p>
                                 <p class='commented'>{{reply.body}}</p>
                                 <div class='commented-like-sec'>
-                                    <p class='like lk-2'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
+                                    <p class='like'><i class="far fa-heart"></i>{# <i class="fas fa-heart"></i>#} Like</p>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
 {% endblock %}
 {% block js %}
 <script>
-    let like = document.querySelector('.like');
+    let like = document.querySelectorAll('.like');
     let like2 = document.querySelectorAll('.lk-2');
     const comment = document.querySelector('.comment');
     const comment2s = document.querySelectorAll('.cmt-2');
@@ -166,29 +166,38 @@
     let flag1 = true;
     let flagCmt2 = true;
 
-    const likefunc = () => {
-        if (flag1) {
-            like.innerHTML = '<i class="fas fa-heart"></i> Liked';
-            flag1 = false;
-        }
-        else {
-            like.innerHTML = '<i class="far fa-heart"></i> Like';
-            flag1 = true;
-        }
-    }
+    // const likefunc = () => {
+    //     if (flag1) {
+    //         like.innerHTML = '<i class="fas fa-heart"></i> Liked';
+    //         flag1 = false;
+    //     }
+    //     else {
+    //         like.innerHTML = '<i class="far fa-heart"></i> Like';
+    //         flag1 = true;
+    //     }
+    // }
     const likefunc2 = (e) => {
         if (flagCmt1) {
-            e.target.innerHTML = '<i class="fas fa-heart"></i> Liked';
-            flagCmt1 = false;
+            if(e.target.localName == 'i'){
+                e.target.parentNode.innerHTML = '<i class="fas fa-heart"></i> Liked';
+                flagCmt1 = false;
+            }
+            else{
+                e.target.innerHTML = '<i class="fas fa-heart"></i> Liked';
+                flagCmt1 = false;
+            }
         }
         else {
+            if(e.target.localName == 'i'){
+                e.target.parentNode.innerHTML = '<i class="far fa-heart"></i> Like';
+                flagCmt1 = true;
+            }
             e.target.innerHTML = '<i class="far fa-heart"></i> Like';
             flagCmt1 = true;
         }
     }
-    like.addEventListener('click', likefunc);
-    if (like2 != null)
-        Array.from(like2).forEach((elem) =>{ elem.addEventListener('click', likefunc2)});
+    if (like != null)
+        Array.from(like).forEach((elem) =>{ elem.addEventListener('click', likefunc2)});
 
 
     comment.addEventListener('click', () => {

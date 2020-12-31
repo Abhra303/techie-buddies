@@ -63,10 +63,6 @@ class Blog(models.Model):
         return self.heading
 
 
-class Like(models.Model):
-    user = models.ForeignKey(User,related_name='like_users',on_delete=models.CASCADE)
-    post = models.ForeignKey(Blog,related_name='like_posts',on_delete=models.CASCADE)
-
 class Comment(models.Model):
     post = models.ForeignKey(Blog,related_name='postcomments' ,on_delete=models.CASCADE)
     user = models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE)
